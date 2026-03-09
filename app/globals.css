@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground: #0a0a0a;
+  --background: #0A0015; /* app dark theme – avoids white stripe when scrolling */
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  min-height: 100dvh;
+}
+
+/* Touch-friendly minimum target size */
+button, a[role="button"], [type="button"], [type="submit"] {
+  min-height: 44px;
+  min-width: 44px;
+}
