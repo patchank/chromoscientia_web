@@ -13,7 +13,7 @@
     "@chromoscientia/game-core": "file:./packages/game-core",
     "@lottiefiles/dotlottie-web": "^0.14.1",
     "firebase": "^10.7.0",
-    "next": "^14.2.35",
+    "next": "^16.1.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
