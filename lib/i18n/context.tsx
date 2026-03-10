@@ -1,9 +1,7 @@
 "use client";
 
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { en } from "@/lib/i18n/translations/en";
-import { es } from "@/lib/i18n/translations/es";
-import { translate } from "@/lib/i18n/get";
+import { en, es, translate } from "@chromoscientia/shared";
 
 export type Locale = "en" | "es";
 

@@ -4,13 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run copy-assets && next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "npm install --prefix packages/game-core"
+    "copy-assets": "node scripts/copy-assets.js",
+    "postinstall": "npm run build --prefix packages/shared/game-core && npm run build --prefix packages/shared/shared && npm run copy-assets"
   },
   "dependencies": {
-    "@chromoscientia/game-core": "file:./packages/game-core",
+    "@chromoscientia/game-core": "file:./packages/shared/game-core",
+    "@chromoscientia/shared": "file:./packages/shared/shared",
     "@lottiefiles/dotlottie-web": "^0.14.1",
     "firebase": "^10.7.0",
     "next": "^16.1.6",
