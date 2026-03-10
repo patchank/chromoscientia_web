@@ -18,9 +18,11 @@ import {
   Timestamp,
 } from "firebase/firestore";
 import { createRoomApi, NICKNAME_TAKEN_ERROR } from "@chromoscientia/shared";
-import type { FirestoreAdapter } from "@chromoscientia/shared";
 import { getDb } from "./firebase";
 import { getOrCreatePlayerId } from "./playerId";
+
+/** Local type for the Firestore API we pass to createRoomApi (avoids depending on shared package exporting it). */
+type FirestoreAdapter = Parameters<typeof createRoomApi>[2];
 
 const firestoreAdapter = {
   doc,
