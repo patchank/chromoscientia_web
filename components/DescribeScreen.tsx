@@ -3,7 +3,7 @@
 import { useMemo, useState, useEffect } from "react";
 import { Logo } from "@/components/Logo";
 import { submitDescription } from "@/lib/room";
-import { contrastColor, toCssHex } from "@/lib/colorContrast";
+import { contrastColor, toCssHex, isLighterThan } from "@/lib/colorContrast";
 import { useFooterBackground } from "@/lib/FooterContext";
 import { LeaveGameButton } from "@/components/LeaveGameButton";
 
@@ -19,6 +19,7 @@ export function DescribeScreen({
 
   const bgHex = useMemo(() => toCssHex(referenceColor), [referenceColor]);
   const textColor = useMemo(() => contrastColor(referenceColor), [referenceColor]);
+  const useDarkLogo = useMemo(() => isLighterThan(bgHex, "#BBBBBB"), [bgHex]);
   const { setBackground } = useFooterBackground();
   useEffect(() => {
     setBackground(bgHex);
@@ -38,12 +39,22 @@ export function DescribeScreen({
 
   return (
     <main
-      className="flex min-h-screen flex-col p-6 pt-10 transition-colors duration-150"
+      className="flex flex-1 min-h-0 flex-col p-6 pt-10 transition-colors duration-150"
       style={{ backgroundColor: bgHex, color: textColor }}
     >
       <LeaveGameButton roomCode={roomCode} backgroundColor={bgHex} />
       <div className="w-full flex justify-center">
-        <Logo className="mb-8" />
+        {useDarkLogo ? (
+          <img
+            src="/chromoscientia_logo_dark.svg"
+            alt="Chromoscientia"
+            className="mb-8 h-8 w-auto max-w-full"
+            width={322}
+            height={32}
+          />
+        ) : (
+          <Logo className="mb-8" />
+        )}
       </div>
       <h1 className="text-xl font-bold mb-3">Describe the color</h1>
       <p className="text-sm mb-8 opacity-90">

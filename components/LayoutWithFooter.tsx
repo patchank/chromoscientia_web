@@ -19,7 +19,7 @@ function FooterOrNothing() {
 export function LayoutWithFooter({ children }: { children: React.ReactNode }) {
   return (
     <FooterProvider>
-      <div className="flex-1 flex flex-col">{children}</div>
+      <div className="flex-1 flex flex-col border-0 border-b-0 shadow-none min-h-0">{children}</div>
       <FooterOrNothing />
     </FooterProvider>
   );

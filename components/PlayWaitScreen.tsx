@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import { DotLottie } from "@lottiefiles/dotlottie-web";
-import { Logo } from "@/components/Logo";
 import { useFooterBackground } from "@/lib/FooterContext";
 import { FloatingCredits } from "@/components/FloatingCredits";
 import { LeaveGameButton } from "@/components/LeaveGameButton";
@@ -60,7 +59,13 @@ export function PlayWaitScreen({
       </div>
       <div className="relative z-10 flex w-full flex-col items-center text-center">
         <div className="flex w-full justify-center px-2">
-          <Logo className="mb-4" />
+          <img
+            src="/chromoscientia_logo_white.svg"
+            alt="Chromoscientia"
+            className="mb-4 h-8 w-auto max-w-full opacity-80"
+            width={322}
+            height={32}
+          />
         </div>
         <p className="text-gray-700 dark:text-gray-300">
           {message ?? `Waiting for ${describerName} to describe the color…`}

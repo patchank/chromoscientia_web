@@ -32,7 +32,7 @@ export function LeaderboardScreen({
 
   return (
     <main
-      className="flex min-h-screen flex-col p-6 pt-10"
+      className="flex flex-1 min-h-0 flex-col p-6 pt-10"
       style={{ backgroundColor: DARK_BG, color: TEXT_LIGHT }}
     >
       <LeaveGameButton roomCode={roomCode} backgroundColor={DARK_BG} />

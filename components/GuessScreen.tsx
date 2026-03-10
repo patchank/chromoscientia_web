@@ -3,7 +3,7 @@
 import { useMemo, useState, useEffect } from "react";
 import { Logo } from "@/components/Logo";
 import { submitGuess } from "@/lib/room";
-import { contrastColor, toCssHex } from "@/lib/colorContrast";
+import { contrastColor, toCssHex, isLighterThan } from "@/lib/colorContrast";
 import { useFooterBackground } from "@/lib/FooterContext";
 import { LeaveGameButton } from "@/components/LeaveGameButton";
 import { ColorPicker, randomFullSaturationHex } from "./ColorPicker";
@@ -20,6 +20,7 @@ export function GuessScreen({
 
   const bgHex = useMemo(() => toCssHex(color), [color]);
   const textColor = useMemo(() => contrastColor(color), [color]);
+  const useDarkLogo = useMemo(() => isLighterThan(bgHex, "#BBBBBB"), [bgHex]);
   const { setBackground } = useFooterBackground();
   useEffect(() => {
     setBackground(bgHex);
@@ -37,12 +38,22 @@ export function GuessScreen({
 
   return (
     <main
-      className="flex min-h-screen flex-col p-6 transition-colors duration-150"
+      className="flex flex-1 min-h-0 flex-col p-6 transition-colors duration-150"
       style={{ backgroundColor: bgHex, color: textColor }}
     >
       <LeaveGameButton roomCode={roomCode} backgroundColor={bgHex} />
       <div className="w-full flex justify-center shrink-0" style={{ minHeight: 32 }}>
-        <Logo className="mb-4" />
+        {useDarkLogo ? (
+          <img
+            src="/chromoscientia_logo_dark.svg"
+            alt="Chromoscientia"
+            className="mb-4 h-8 w-auto max-w-full"
+            width={322}
+            height={32}
+          />
+        ) : (
+          <Logo className="mb-4" />
+        )}
       </div>
       <h1 className="text-xl font-bold mb-2">Guess the color</h1>
       <p className="mb-4 italic opacity-90">

@@ -9,7 +9,7 @@ export function Credits({
 }) {
   return (
     <footer
-      className="w-full flex justify-center items-center gap-2 py-3 shrink-0"
+      className="w-full flex justify-center items-center gap-2 py-3 shrink-0 border-0 border-t-0"
       style={{ color: TEXT_LIGHT, ...style }}
       aria-label="Credits"
     >

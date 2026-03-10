@@ -9,6 +9,13 @@ import {
   onSnapshot,
   serverTimestamp,
   arrayUnion,
+  collection,
+  query,
+  where,
+  getDocs,
+  writeBatch,
+  limit,
+  Timestamp,
   type Firestore,
   type Unsubscribe,
 } from "firebase/firestore";
@@ -42,6 +49,9 @@ import {
 
 const ROOM_CODE_LENGTH = 6;
 const ROOM_CODE_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+const ROOM_MAX_AGE_MS = 2 * 60 * 60 * 1000; // 2 hours
+const MAX_OLD_ROOMS_TO_DELETE = 500; // Firestore batch limit is 500
 
 function generateRoomCode(): string {
   let code = "";
@@ -82,9 +92,28 @@ export interface GameSnapshot {
   updatedAt?: unknown;
 }
 
+/** Delete rooms (and their games) created more than 2 hours ago. Runs when creating a new room. */
+async function deleteOldRoomsAndGames(db: Firestore): Promise<void> {
+  const cutoff = Timestamp.fromMillis(Date.now() - ROOM_MAX_AGE_MS);
+  const q = query(
+    collection(db, "rooms"),
+    where("createdAt", "<", cutoff),
+    limit(MAX_OLD_ROOMS_TO_DELETE)
+  );
+  const snapshot = await getDocs(q);
+  if (snapshot.empty) return;
+  const batch = writeBatch(db);
+  for (const d of snapshot.docs) {
+    batch.delete(d.ref);
+    batch.delete(doc(db, "games", d.id));
+  }
+  await batch.commit();
+}
+
 export async function createRoom(nickname: string): Promise<string> {
   const db = getDb();
   if (!db) throw new Error("Firebase not configured");
+  await deleteOldRoomsAndGames(db);
   const playerId = getOrCreatePlayerId();
   let code: string;
   let attempts = 0;
@@ -203,7 +232,12 @@ export async function startGame(roomCode: string): Promise<void> {
     scores: initialScores,
     updatedAt: serverTimestamp(),
   });
-  await updateDoc(roomRef, { status: "playing" });
+  await updateDoc(roomRef, { status: "playing", endedByLeave: false });
+}
+
+/** Start a new game in the same room with the same players (play again from end screen). */
+export async function playAgain(roomCode: string): Promise<void> {
+  return startGame(roomCode);
 }
 
 export async function submitDescription(

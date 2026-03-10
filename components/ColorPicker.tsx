@@ -116,9 +116,6 @@ export function ColorPicker({ value, onChange }: ColorPickerProps) {
 
   return (
     <div className="w-full space-y-4">
-      <p className="text-sm text-gray-500">
-        Drag: left/right = Hue, up/down = Lightness. Bar below = Saturation.
-      </p>
       <div
         ref={areaRef}
         className="w-full aspect-square max-w-sm mx-auto rounded-xl border-2 border-gray-300 dark:border-gray-600 cursor-crosshair touch-none select-none relative overflow-hidden"

@@ -18,3 +18,56 @@ button, a[role="button"], [type="button"], [type="submit"] {
   min-height: 44px;
   min-width: 44px;
 }
+
+/* No visible line between content and footer (Brave draws a seam; overlap hides it) */
+footer[aria-label="Credits"] {
+  border-top: none !important;
+  box-shadow: none !important;
+  margin-top: -1px;
+}
+
+/* Animated gradient border for EndScreen top score (CodePen: mike-schultz/NgQvGO) */
+.end-screen-gradient-border {
+  --borderWidth: 4px;
+  position: relative;
+  border-radius: 8px;
+  overflow: visible;
+}
+.end-screen-gradient-border::after {
+  content: "";
+  position: absolute;
+  top: calc(-1 * var(--borderWidth));
+  left: calc(-1 * var(--borderWidth));
+  height: calc(100% + var(--borderWidth) * 2);
+  width: calc(100% + var(--borderWidth) * 2);
+  background: linear-gradient(
+    60deg,
+    #e9feff,
+    #fbbf24,
+    #f87171,
+    #a78bfa,
+    #e9feff
+  );
+  border-radius: calc(8px + var(--borderWidth));
+  z-index: 0;
+  animation: animatedgradient 3s ease alternate infinite;
+  background-size: 300% 300%;
+}
+/* Opaque so the gradient only shows in the border ring, not through the card */
+.end-screen-gradient-border-inner {
+  position: relative;
+  z-index: 1;
+  border-radius: 6px;
+  background: #1d1525;
+}
+@keyframes animatedgradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
