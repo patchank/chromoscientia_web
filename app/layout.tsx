@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { LocaleProvider } from "@/lib/i18n";
 import { LayoutWithFooter } from "@/components/LayoutWithFooter";
 import "./globals.css";
 
@@ -22,7 +23,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="antialiased min-h-screen flex flex-col" suppressHydrationWarning>
-        <LayoutWithFooter>{children}</LayoutWithFooter>
+        <LocaleProvider>
+          <LayoutWithFooter>{children}</LayoutWithFooter>
+        </LocaleProvider>
       </body>
     </html>
   );

@@ -3,6 +3,7 @@
 import { Logo } from "@/components/Logo";
 import { acknowledgeLeaderboard } from "@/lib/room";
 import { LeaveGameButton } from "@/components/LeaveGameButton";
+import { useTranslations } from "@/lib/i18n";
 import { ACCENT, ACCENT_BUTTON_TEXT, DARK_BG, TEXT_LIGHT } from "@/lib/theme";
 import type { GameSnapshot, RoomSnapshot } from "@/lib/room";
 
@@ -17,6 +18,7 @@ export function LeaderboardScreen({
   room: RoomSnapshot;
   onAcknowledge?: () => void | Promise<void>;
 }) {
+  const { t } = useTranslations();
   const scores = game.scores ?? {};
   const sorted = [...game.playerOrder].sort(
     (a, b) => (scores[b] ?? 0) - (scores[a] ?? 0)
@@ -39,7 +41,7 @@ export function LeaderboardScreen({
       <div className="w-full flex justify-center">
         <Logo className="mb-8" />
       </div>
-      <h1 className="text-xl font-bold mb-3">Leaderboard</h1>
+      <h1 className="text-xl font-bold mb-3">{t("leaderboard.title")}</h1>
       <ul className="space-y-3 mb-8">
         {sorted.map((id, i) => (
           <li
@@ -48,10 +50,10 @@ export function LeaderboardScreen({
             style={{ backgroundColor: "rgba(255,255,255,0.08)" }}
           >
             <span className="font-medium">
-              {i + 1}. {room.playerNames[id] ?? "?"}
+              {i + 1}. {room.playerNames[id] ?? t("waiting.unknown")}
             </span>
             <span className="font-bold" style={{ color: ACCENT }}>
-              {scores[id] ?? 0} pts
+              {scores[id] ?? 0} {t("leaderboard.pts")}
             </span>
           </li>
         ))}
@@ -61,7 +63,7 @@ export function LeaderboardScreen({
         className="w-full rounded-lg px-6 py-3 font-medium transition-opacity hover:opacity-90"
         style={{ backgroundColor: ACCENT, color: ACCENT_BUTTON_TEXT }}
       >
-        OK
+        {t("leaderboard.ok")}
       </button>
     </main>
   );

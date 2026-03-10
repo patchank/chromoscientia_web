@@ -5,6 +5,7 @@ import { Logo } from "@/components/Logo";
 import { submitGuess } from "@/lib/room";
 import { contrastColor, toCssHex, isLighterThan } from "@/lib/colorContrast";
 import { useFooterBackground } from "@/lib/FooterContext";
+import { useTranslations } from "@/lib/i18n";
 import { LeaveGameButton } from "@/components/LeaveGameButton";
 import { ColorPicker, randomFullSaturationHex } from "./ColorPicker";
 
@@ -15,6 +16,7 @@ export function GuessScreen({
   roomCode: string;
   description: string;
 }) {
+  const { t } = useTranslations();
   const [color, setColor] = useState(() => randomFullSaturationHex());
   const [loading, setLoading] = useState(false);
 
@@ -55,7 +57,7 @@ export function GuessScreen({
           <Logo className="mb-4" />
         )}
       </div>
-      <h1 className="text-xl font-bold mb-2">Guess the color</h1>
+      <h1 className="text-xl font-bold mb-2">{t("guess.title")}</h1>
       <p className="mb-4 italic opacity-90">
         &ldquo;{description}&rdquo;
       </p>
@@ -69,7 +71,7 @@ export function GuessScreen({
           color: bgHex,
         }}
       >
-        CHOOSE
+        {t("guess.choose")}
       </button>
     </main>
   );

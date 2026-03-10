@@ -3,9 +3,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { useTranslations } from "@/lib/i18n";
 import { ACCENT, ACCENT_BUTTON_TEXT, DARK_BG, TEXT_LIGHT } from "@/lib/theme";
 
 export default function StartPage() {
+  const { t } = useTranslations();
   const [instructionsOpen, setInstructionsOpen] = useState(false);
 
   return (
@@ -13,12 +16,13 @@ export default function StartPage() {
       className="flex flex-1 flex-col items-center justify-center p-6 min-h-0 relative"
       style={{ backgroundColor: DARK_BG, color: TEXT_LIGHT }}
     >
+      <LanguageSwitcher />
       <button
         type="button"
         onClick={() => setInstructionsOpen(true)}
         className="absolute top-4 right-4 flex h-12 w-12 items-center justify-center rounded-full border-0 opacity-90 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--background)]"
         style={{ backgroundColor: "rgba(255,255,255,0.1)" }}
-        aria-label="How to play"
+        aria-label={t("start.howToPlay")}
       >
         <img
           src="/help_button.svg"
@@ -36,14 +40,14 @@ export default function StartPage() {
           className="rounded-lg px-6 py-3 text-center font-medium transition-opacity hover:opacity-90"
           style={{ backgroundColor: ACCENT, color: ACCENT_BUTTON_TEXT }}
         >
-          Create room
+          {t("start.createRoom")}
         </Link>
         <Link
           href="/join"
           className="rounded-lg border-2 px-6 py-3 text-center font-medium transition-opacity hover:opacity-90"
           style={{ borderColor: ACCENT, color: ACCENT }}
         >
-          Join with code
+          {t("start.joinWithCode")}
         </Link>
       </div>
 
@@ -57,28 +61,28 @@ export default function StartPage() {
         >
           <div className="w-full max-w-md rounded-xl p-6 shadow-xl" style={{ backgroundColor: DARK_BG }}>
             <h2 id="how-to-play-title" className="text-xl font-bold mb-4" style={{ color: ACCENT }}>
-              How to play
+              {t("start.howToPlayTitle")}
             </h2>
             <div className="text-sm space-y-4 opacity-90 overflow-y-auto max-h-[70vh] pr-2">
               <section>
-                <h3 className="font-semibold mb-1">Get everyone in</h3>
-                <p>You need 3 to 8 players. Someone creates a room and gets a short code—share it with your friends (or family). Everyone else taps “Join with code” and enters that code. When you’re all in the waiting screen, the person who created the room taps “Start game” and you’re off.</p>
+                <h3 className="font-semibold mb-1">{t("start.instructions.getEveryoneIn")}</h3>
+                <p>{t("start.instructions.getEveryoneInText")}</p>
               </section>
               <section>
-                <h3 className="font-semibold mb-1">Your turn to describe</h3>
-                <p>Each round, one person is the “describer.” That player sees a secret color that nobody else can see. Your job is to describe it in words—e.g. “like a cloudy sky” or “dull orange.” Type your description and tap SEND. The others are waiting on their screens until you send.</p>
+                <h3 className="font-semibold mb-1">{t("start.instructions.yourTurnToDescribe")}</h3>
+                <p>{t("start.instructions.yourTurnToDescribeText")}</p>
               </section>
               <section>
-                <h3 className="font-semibold mb-1">Everyone else guesses</h3>
-                <p>Once the description is sent, everyone else sees it and has to pick a color they think matches. You’ll get a big color square and a bar underneath: move your finger or cursor on the square to change the color, and use the bar to make it more or less vivid. When you’re happy with your guess, tap CHOOSE.</p>
+                <h3 className="font-semibold mb-1">{t("start.instructions.everyoneElseGuesses")}</h3>
+                <p>{t("start.instructions.everyoneElseGuessesText")}</p>
               </section>
               <section>
-                <h3 className="font-semibold mb-1">Who gets points?</h3>
-                <p>The game compares everyone’s color to the secret one. The closer your color, the better. The closest guess gets 5 points. If there are at least 4 players, second closest gets 3 points. If there are at least 6, third closest gets 1 point. The person who described can also earn a small bonus if someone guessed really close.</p>
+                <h3 className="font-semibold mb-1">{t("start.instructions.whoGetsPoints")}</h3>
+                <p>{t("start.instructions.whoGetsPointsText")}</p>
               </section>
               <section>
-                <h3 className="font-semibold mb-1">How you win</h3>
-                <p>You play until everyone has been the describer 3 times. Then you see the final scores. The player with the most points wins.</p>
+                <h3 className="font-semibold mb-1">{t("start.instructions.howYouWin")}</h3>
+                <p>{t("start.instructions.howYouWinText")}</p>
               </section>
             </div>
             <button
@@ -87,7 +91,7 @@ export default function StartPage() {
               className="w-full mt-6 rounded-lg px-6 py-3 font-medium transition-opacity hover:opacity-90"
               style={{ backgroundColor: ACCENT, color: ACCENT_BUTTON_TEXT }}
             >
-              Got it
+              {t("start.gotIt")}
             </button>
           </div>
         </div>

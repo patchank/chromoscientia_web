@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { DotLottie } from "@lottiefiles/dotlottie-web";
 import { useFooterBackground } from "@/lib/FooterContext";
+import { useTranslations } from "@/lib/i18n";
 import { FloatingCredits } from "@/components/FloatingCredits";
 import { LeaveGameButton } from "@/components/LeaveGameButton";
 import { DARK_BG } from "@/lib/theme";
@@ -18,10 +19,12 @@ export function PlayWaitScreen({
   describerName: string;
   message?: string;
 }) {
+  const { t } = useTranslations();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const dotLottieRef = useRef<DotLottie | null>(null);
 
   const { setBackground } = useFooterBackground();
+  const displayMessage = message ?? t("playWait.waitingFor", { name: describerName });
   useEffect(() => {
     setBackground("hidden");
     return () => setBackground(null);
@@ -68,7 +71,7 @@ export function PlayWaitScreen({
           />
         </div>
         <p className="text-gray-700 dark:text-gray-300">
-          {message ?? `Waiting for ${describerName} to describe the color…`}
+          {displayMessage}
         </p>
       </div>
       <FloatingCredits />

@@ -5,6 +5,7 @@ import { Logo } from "@/components/Logo";
 import { acknowledgeResults } from "@/lib/room";
 import { contrastColor, toCssHex, isLighterThan } from "@/lib/colorContrast";
 import { useFooterBackground } from "@/lib/FooterContext";
+import { useTranslations } from "@/lib/i18n";
 import { LeaveGameButton } from "@/components/LeaveGameButton";
 import type { GameSnapshot, RoomSnapshot } from "@/lib/room";
 
@@ -19,6 +20,7 @@ export function ResultsScreen({
   room: RoomSnapshot;
   onAcknowledge?: () => void | Promise<void>;
 }) {
+  const { t } = useTranslations();
   const refColor = game.referenceColor;
   const bgHex = useMemo(() => toCssHex(refColor), [refColor]);
   const textColor = useMemo(() => contrastColor(refColor), [refColor]);
@@ -31,12 +33,12 @@ export function ResultsScreen({
 
   const guesses = game.guesses ?? {};
   const describerId = game.playerOrder?.[game.turnIndex];
-  const describerName = describerId ? room.playerNames[describerId] ?? "Describer" : "Describer";
+  const describerName = describerId ? room.playerNames[describerId] ?? t("results.describer") : t("results.describer");
   const entries = game.playerOrder
     .filter((id) => id !== describerId)
     .map((id) => ({
       id,
-      name: room.playerNames[id] ?? "?",
+      name: room.playerNames[id] ?? t("waiting.unknown"),
       ...guesses[id],
     }))
     .filter((e) => e.color);
@@ -68,7 +70,7 @@ export function ResultsScreen({
           <Logo className="mb-8" />
         )}
       </div>
-      <h1 className="text-xl font-bold mb-3">Results</h1>
+      <h1 className="text-xl font-bold mb-3">{t("results.title")}</h1>
       {game.description ? (
         <p className="mb-8 italic opacity-90">
           &ldquo;{game.description}&rdquo;
@@ -76,10 +78,10 @@ export function ResultsScreen({
       ) : null}
       {game.describerBonus != null && game.describerBonus > 0 && (
         <p className="text-sm mb-8 opacity-90">
-          +{game.describerBonus} pts → {describerName} (close guess)
+          +{game.describerBonus} {t("common.pts")} → {describerName} ({t("results.closeGuess")})
         </p>
       )}
-      <p className="text-sm font-medium mb-2">Guesses</p>
+      <p className="text-sm font-medium mb-2">{t("results.guesses")}</p>
       <ul className="space-y-3 mb-8">
         {entries.map((e) => (
           <li key={e.id} className="flex items-center gap-3">
@@ -91,7 +93,7 @@ export function ResultsScreen({
             {e.distance != null && (
               <span className="text-sm opacity-90">
                 ΔE {e.distance.toFixed(1)}
-                {e.points != null && e.points > 0 && ` · +${e.points} pts`}
+                {e.points != null && e.points > 0 && ` · +${e.points} ${t("common.pts")}`}
               </span>
             )}
           </li>
@@ -105,7 +107,7 @@ export function ResultsScreen({
           color: bgHex,
         }}
       >
-        OK
+        {t("results.ok")}
       </button>
     </main>
   );

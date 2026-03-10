@@ -6,9 +6,11 @@ import Link from "next/link";
 import { Logo } from "@/components/Logo";
 import { createRoom } from "@/lib/room";
 import { isFirebaseConfigured } from "@/lib/firebase";
+import { useTranslations } from "@/lib/i18n";
 import { ACCENT, ACCENT_BUTTON_TEXT, DARK_BG, ERROR, TEXT_LIGHT } from "@/lib/theme";
 
 export default function CreatePage() {
+  const { t } = useTranslations();
   const router = useRouter();
   const [nickname, setNickname] = useState("");
   const [error, setError] = useState("");
@@ -21,7 +23,7 @@ export default function CreatePage() {
     setError("");
     const name = nickname.trim();
     if (!name) {
-      setError("Enter a nickname");
+      setError(t("create.enterNickname"));
       return;
     }
     setLoading(true);
@@ -29,7 +31,7 @@ export default function CreatePage() {
       const code = await createRoom(name);
       router.push(`/room/${code}`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to create room");
+      setError(err instanceof Error ? err.message : t("common.failedToCreateRoom"));
     } finally {
       setLoading(false);
     }
@@ -43,10 +45,10 @@ export default function CreatePage() {
       >
         <Logo className="mb-6" />
         <p className="text-center mb-6 opacity-90">
-          Firebase is not configured. Add your credentials to .env.local (see .env.example).
+          {t("create.firebaseNotConfigured")}
         </p>
         <Link href="/" className="underline hover:opacity-80" style={{ color: ACCENT }}>
-          Back to start
+          {t("create.backToStart")}
         </Link>
       </main>
     );
@@ -58,18 +60,18 @@ export default function CreatePage() {
       style={{ backgroundColor: DARK_BG, color: TEXT_LIGHT }}
     >
       <Logo className="mb-6" />
-      <h1 className="text-xl font-bold mb-6">Create room</h1>
+      <h1 className="text-xl font-bold mb-6">{t("create.title")}</h1>
       <form onSubmit={handleSubmit} className="w-full max-w-xs space-y-4">
         <div>
           <label htmlFor="nickname" className="block text-sm font-medium mb-1 opacity-90">
-            Your nickname
+            {t("create.yourNickname")}
           </label>
           <input
             id="nickname"
             type="text"
             value={nickname}
             onChange={(e) => setNickname(e.target.value)}
-            placeholder="e.g. Alex"
+            placeholder={t("create.nicknamePlaceholder")}
             className="w-full rounded-lg border-2 px-4 py-3 text-base placeholder:opacity-60"
             style={{
               backgroundColor: "rgba(255,255,255,0.1)",
@@ -89,11 +91,11 @@ export default function CreatePage() {
           className="w-full rounded-lg px-6 py-3 font-medium transition-opacity hover:opacity-90 disabled:opacity-50"
           style={{ backgroundColor: ACCENT, color: ACCENT_BUTTON_TEXT }}
         >
-          {loading ? "Creating…" : "Create room"}
+          {loading ? t("create.creating") : t("create.createRoom")}
         </button>
       </form>
       <Link href="/" className="mt-6 text-sm underline hover:opacity-80" style={{ color: ACCENT }}>
-        Back to start
+        {t("create.backToStart")}
       </Link>
     </main>
   );

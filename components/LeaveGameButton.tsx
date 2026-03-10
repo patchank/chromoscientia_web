@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import { endGameForAll, leaveRoom } from "@/lib/room";
+import { useTranslations } from "@/lib/i18n";
 import { contrastColor, toCssHex } from "@/lib/colorContrast";
 
 /** Exit icon (stroke-only); color via currentColor. */
@@ -35,6 +36,7 @@ export function LeaveGameButton({
   roomCode: string;
   backgroundColor: string;
 }) {
+  const { t } = useTranslations();
   const router = useRouter();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [leaving, setLeaving] = useState(false);
@@ -63,7 +65,7 @@ export function LeaveGameButton({
           backgroundColor: "rgba(0,0,0,0.2)",
           color: iconColor,
         }}
-        aria-label="Leave game (ends game for everyone)"
+        aria-label={t("leaveGame.ariaLabel")}
       >
         <ExitIcon />
       </button>
@@ -81,10 +83,10 @@ export function LeaveGameButton({
             style={{ backgroundColor: "#1a1a2e", color: "#E9E0F0" }}
           >
             <h2 id="leave-dialog-title" className="text-lg font-bold mb-2">
-              Leave game?
+              {t("leaveGame.title")}
             </h2>
             <p className="text-sm opacity-90 mb-6">
-              Leaving will end the game for everyone in the room. Are you sure?
+              {t("leaveGame.message")}
             </p>
             <div className="flex gap-3 justify-end">
               <button
@@ -93,7 +95,7 @@ export function LeaveGameButton({
                 className="rounded-lg px-4 py-2 font-medium opacity-90 hover:opacity-100"
                 style={{ backgroundColor: "rgba(255,255,255,0.1)" }}
               >
-                Cancel
+                {t("leaveGame.cancel")}
               </button>
               <button
                 type="button"
@@ -102,7 +104,7 @@ export function LeaveGameButton({
                 className="rounded-lg px-4 py-2 font-medium text-black"
                 style={{ backgroundColor: "#F87171" }}
               >
-                {leaving ? "Leaving…" : "Leave"}
+                {leaving ? t("leaveGame.leaving") : t("leaveGame.leave")}
               </button>
             </div>
           </div>

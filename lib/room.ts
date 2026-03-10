@@ -53,6 +53,9 @@ const ROOM_CODE_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 const ROOM_MAX_AGE_MS = 2 * 60 * 60 * 1000; // 2 hours
 const MAX_OLD_ROOMS_TO_DELETE = 500; // Firestore batch limit is 500
 
+/** Error message thrown when joining with a nickname already in use. Compare to this in UI to show localized message. */
+export const NICKNAME_TAKEN_ERROR = "This nickname is already taken in this room";
+
 function generateRoomCode(): string {
   let code = "";
   for (let i = 0; i < ROOM_CODE_LENGTH; i++) {
@@ -158,7 +161,7 @@ export async function joinRoom(
   );
   const nameLower = nickname.trim().toLowerCase();
   if (existingNames.includes(nameLower))
-    throw new Error("This nickname is already taken in this room");
+    throw new Error(NICKNAME_TAKEN_ERROR);
   const playerNames = { ...(data.playerNames ?? {}), [playerId]: nickname };
   await updateDoc(roomRef, {
     playerIds: [...playerIds, playerId],

@@ -5,6 +5,7 @@ import { Logo } from "@/components/Logo";
 import { submitDescription } from "@/lib/room";
 import { contrastColor, toCssHex, isLighterThan } from "@/lib/colorContrast";
 import { useFooterBackground } from "@/lib/FooterContext";
+import { useTranslations } from "@/lib/i18n";
 import { LeaveGameButton } from "@/components/LeaveGameButton";
 
 export function DescribeScreen({
@@ -14,6 +15,7 @@ export function DescribeScreen({
   roomCode: string;
   referenceColor: string;
 }) {
+  const { t } = useTranslations();
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -56,18 +58,18 @@ export function DescribeScreen({
           <Logo className="mb-8" />
         )}
       </div>
-      <h1 className="text-xl font-bold mb-3">Describe the color</h1>
+      <h1 className="text-xl font-bold mb-3">{t("describe.title")}</h1>
       <p className="text-sm mb-8 opacity-90">
-        Others will guess this color from your description.
+        {t("describe.subtitle")}
       </p>
       <label htmlFor="desc" className="block text-sm font-medium mb-2">
-        Your description
+        {t("describe.yourDescription")}
       </label>
       <textarea
         id="desc"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
-        placeholder="e.g. Like a summer sky at dusk"
+        placeholder={t("describe.placeholder")}
         className="w-full rounded-lg border-2 px-4 py-3 text-base min-h-[100px] mb-6 placeholder:opacity-70"
         style={{
           backgroundColor: textColor,
@@ -85,7 +87,7 @@ export function DescribeScreen({
           color: bgHex,
         }}
       >
-        SEND
+        {t("describe.send")}
       </button>
     </main>
   );

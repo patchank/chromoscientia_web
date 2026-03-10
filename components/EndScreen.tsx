@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Logo } from "@/components/Logo";
 import { LeaveGameButton } from "@/components/LeaveGameButton";
+import { useTranslations } from "@/lib/i18n";
 import { ACCENT, ACCENT_BUTTON_TEXT, DARK_BG, TEXT_LIGHT } from "@/lib/theme";
 import { playAgain } from "@/lib/room";
 import type { GameSnapshot, RoomSnapshot } from "@/lib/room";
@@ -16,6 +17,7 @@ export function EndScreen({
   game: GameSnapshot;
   room: RoomSnapshot;
 }) {
+  const { t } = useTranslations();
   const [loading, setLoading] = useState(false);
   const scores = game.scores ?? {};
   const sorted = [...game.playerOrder].sort(
@@ -40,8 +42,8 @@ export function EndScreen({
       <div className="w-full flex justify-center">
         <Logo className="mb-8" />
       </div>
-      <h1 className="text-xl font-bold mb-3">Game over</h1>
-      <p className="text-sm mb-3 opacity-90">Final scores</p>
+      <h1 className="text-xl font-bold mb-3">{t("end.gameOver")}</h1>
+      <p className="text-sm mb-3 opacity-90">{t("end.finalScores")}</p>
       <ul className="space-y-3 mb-8 overflow-visible">
         {sorted.map((id, i) => (
           <li
@@ -58,19 +60,19 @@ export function EndScreen({
             {i === 0 ? (
               <div className="end-screen-gradient-border-inner flex items-center justify-between rounded-lg px-4 py-3">
                 <span className="font-medium">
-                  1. {room.playerNames[id] ?? "?"}
+                  1. {room.playerNames[id] ?? t("waiting.unknown")}
                 </span>
                 <span className="font-bold" style={{ color: ACCENT }}>
-                  {scores[id] ?? 0} pts
+                  {scores[id] ?? 0} {t("end.pts")}
                 </span>
               </div>
             ) : (
               <>
                 <span className="font-medium">
-                  {i + 1}. {room.playerNames[id] ?? "?"}
+                  {i + 1}. {room.playerNames[id] ?? t("waiting.unknown")}
                 </span>
                 <span className="font-bold" style={{ color: ACCENT }}>
-                  {scores[id] ?? 0} pts
+                  {scores[id] ?? 0} {t("end.pts")}
                 </span>
               </>
             )}
@@ -84,7 +86,7 @@ export function EndScreen({
         className="w-full rounded-lg px-6 py-3 text-center font-medium transition-opacity hover:opacity-90 disabled:opacity-70"
         style={{ backgroundColor: ACCENT, color: ACCENT_BUTTON_TEXT }}
       >
-        {loading ? "Starting…" : "Play again"}
+        {loading ? t("end.starting") : t("end.playAgain")}
       </button>
     </main>
   );

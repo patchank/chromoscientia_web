@@ -14,6 +14,7 @@ import {
   acknowledgeLeaderboard,
 } from "@/lib/room";
 import { getDb, isFirebaseConfigured } from "@/lib/firebase";
+import { useTranslations } from "@/lib/i18n";
 import { Logo } from "@/components/Logo";
 import { darkScreenStyle } from "@/lib/theme";
 import { WaitingScreen } from "@/components/WaitingScreen";
@@ -29,20 +30,29 @@ const PlayWaitScreen = dynamic(
 );
 
 function PlayWaitScreenFallback() {
+  const { t } = useTranslations();
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-6" style={darkScreenStyle}>
       <Logo className="mb-4" />
-      <p className="opacity-90">Loading…</p>
+      <p className="opacity-90">{t("room.loading")}</p>
     </main>
   );
 }
 
 export default function RoomPage() {
+  const { t } = useTranslations();
   const params = useParams();
   const router = useRouter();
   const code = typeof params.code === "string" ? params.code : null;
   const { room, loading: roomLoading } = useRoom(code);
   const { game, loading: gameLoading, isDescriber, playerId } = useGame(code);
+
+  // Redirect to start if room not found (invalid code or deleted room)
+  useEffect(() => {
+    if (code && !roomLoading && !room) {
+      router.replace("/");
+    }
+  }, [code, roomLoading, room, router]);
 
   // Redirect to start if this player is not in the room
   useEffect(() => {
@@ -91,7 +101,7 @@ export default function RoomPage() {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center p-6" style={darkScreenStyle}>
         <Logo className="mb-6" />
-        <p className="opacity-90">Firebase is not configured.</p>
+        <p className="opacity-90">{t("room.firebaseNotConfigured")}</p>
       </main>
     );
   }
@@ -100,7 +110,7 @@ export default function RoomPage() {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center p-6" style={darkScreenStyle}>
         <Logo className="mb-6" />
-        <p className="opacity-90">Invalid room.</p>
+        <p className="opacity-90">{t("room.invalidRoom")}</p>
       </main>
     );
   }
@@ -109,9 +119,7 @@ export default function RoomPage() {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center p-6" style={darkScreenStyle}>
         <Logo className="mb-6" />
-        <p className="opacity-90">
-          {roomLoading ? "Loading…" : "Room not found."}
-        </p>
+        <p className="opacity-90">{t("room.loading")}</p>
       </main>
     );
   }
@@ -121,7 +129,7 @@ export default function RoomPage() {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center p-6" style={darkScreenStyle}>
         <Logo className="mb-6" />
-        <p className="opacity-90">Redirecting…</p>
+        <p className="opacity-90">{t("room.redirecting")}</p>
       </main>
     );
   }
@@ -131,10 +139,10 @@ export default function RoomPage() {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center p-6" style={darkScreenStyle}>
         <Logo className="mb-6" />
-        <h1 className="text-xl font-bold mb-2">Game ended</h1>
-        <p className="opacity-90 mb-6 text-center">A player left the room. The game has ended for everyone.</p>
+        <h1 className="text-xl font-bold mb-2">{t("room.gameEnded")}</h1>
+        <p className="opacity-90 mb-6 text-center">{t("room.gameEndedByLeave")}</p>
         <Link href="/" className="rounded-lg px-4 py-2 font-medium text-black" style={{ backgroundColor: "#E9FEFF" }}>
-          Back to start
+          {t("room.backToStart")}
         </Link>
       </main>
     );
@@ -170,7 +178,7 @@ export default function RoomPage() {
       <PlayWaitScreen
         roomCode={code}
         describerName={
-          room.playerNames[game.playerOrder[game.turnIndex]] ?? "Someone"
+          room.playerNames[game.playerOrder[game.turnIndex]] ?? t("common.someone")
         }
       />
     );
@@ -181,8 +189,8 @@ export default function RoomPage() {
       return (
         <PlayWaitScreen
           roomCode={code}
-          describerName="you"
-          message="Waiting for others to guess…"
+          describerName={t("playWait.you")}
+          message={t("playWait.waitingForOthers")}
         />
       );
     }
@@ -193,7 +201,7 @@ export default function RoomPage() {
         <PlayWaitScreen
           roomCode={code}
           describerName=""
-          message="Waiting for others to guess…"
+          message={t("playWait.waitingForOthers")}
         />
       );
     }
@@ -217,7 +225,7 @@ export default function RoomPage() {
         <PlayWaitScreen
           roomCode={code}
           describerName=""
-          message="Waiting for others to continue…"
+          message={t("playWait.waitingToContinue")}
         />
       );
     }
@@ -256,7 +264,7 @@ export default function RoomPage() {
         <PlayWaitScreen
           roomCode={code}
           describerName=""
-          message="Waiting for others to continue…"
+          message={t("playWait.waitingToContinue")}
         />
       );
     }
@@ -276,7 +284,7 @@ export default function RoomPage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-6" style={darkScreenStyle}>
       <Logo className="mb-6" />
-      <p className="opacity-90">Loading…</p>
+      <p className="opacity-90">{t("room.loading")}</p>
     </main>
   );
 }
