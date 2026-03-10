@@ -23,11 +23,15 @@ export function GuessScreen({
   const bgHex = useMemo(() => toCssHex(color), [color]);
   const textColor = useMemo(() => contrastColor(color), [color]);
   const useDarkLogo = useMemo(() => isLighterThan(bgHex, "#BBBBBB"), [bgHex]);
-  const { setBackground } = useFooterBackground();
+  const { setBackground, setForeground } = useFooterBackground();
   useEffect(() => {
     setBackground(bgHex);
-    return () => setBackground(null);
-  }, [bgHex, setBackground]);
+    setForeground(textColor);
+    return () => {
+      setBackground(null);
+      setForeground(null);
+    };
+  }, [bgHex, textColor, setBackground, setForeground]);
 
   async function handleChoose() {
     setLoading(true);
@@ -40,7 +44,7 @@ export function GuessScreen({
 
   return (
     <main
-      className="flex flex-1 min-h-0 flex-col p-6 transition-colors duration-150"
+      className="flex flex-1 min-h-0 flex-col p-6"
       style={{ backgroundColor: bgHex, color: textColor }}
     >
       <LeaveGameButton roomCode={roomCode} backgroundColor={bgHex} />

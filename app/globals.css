@@ -10,7 +10,20 @@
 body {
   color: var(--foreground);
   background: var(--background);
+  min-height: 100vh;
   min-height: 100dvh;
+  /* Prevent scroll when full-screen content (e.g. PlayWaitScreen) fits exactly in viewport */
+  overflow-x: hidden;
+}
+
+/* Fit within visible viewport (accounts for browser address bar / UI) */
+.screen-fit-viewport {
+  min-height: 100vh;
+  min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
+  max-height: 100vh;
+  max-height: 100dvh;
 }
 
 /* Touch-friendly minimum target size */

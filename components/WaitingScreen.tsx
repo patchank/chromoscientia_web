@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import QRCode from "qrcode";
 import { Logo } from "@/components/Logo";
 import { leaveRoom, startGame } from "@/lib/room";
 import { useTranslations } from "@/lib/i18n";
@@ -26,10 +27,20 @@ export function WaitingScreen({
   const isHost = room.hostId === playerId;
   const canStart = isHost && room.playerIds.length >= 3;
   const { setBackground } = useFooterBackground();
+  const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
+
   useEffect(() => {
     setBackground("hidden");
     return () => setBackground(null);
   }, [setBackground]);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !roomCode) return;
+    const joinUrl = `${window.location.origin}/join?code=${encodeURIComponent(roomCode)}`;
+    QRCode.toDataURL(joinUrl, { width: 180, margin: 2 })
+      .then(setQrDataUrl)
+      .catch(() => {});
+  }, [roomCode]);
 
   async function handleLeave() {
     setError("");
@@ -65,9 +76,22 @@ export function WaitingScreen({
       <div className="w-full flex justify-center">
         <Logo className="mb-4" />
       </div>
-      <p className="text-sm mb-6 opacity-90">
+      <p className="text-sm mb-2 opacity-90">
         {t("waiting.roomCode")}: <strong className="font-mono">{roomCode}</strong>
       </p>
+      {qrDataUrl && (
+        <div className="mb-6 flex flex-col items-center">
+          <img
+            src={qrDataUrl}
+            alt=""
+            width={180}
+            height={180}
+            className="rounded-lg border-2 border-white/20 bg-white"
+            aria-hidden
+          />
+          <p className="mt-2 text-xs opacity-80">{t("waiting.scanToJoin")}</p>
+        </div>
+      )}
       <p className="text-sm mb-2 opacity-90">{t("waiting.playersCount", { count: room.playerIds.length })}</p>
       <ul className="list-disc list-inside mb-6 opacity-90">
         {room.playerIds.map((id) => (

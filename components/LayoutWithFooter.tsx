@@ -2,15 +2,16 @@
 
 import { FooterProvider, useFooterBackground } from "@/lib/FooterContext";
 import { Credits } from "@/components/Credits";
-import { DARK_BG } from "@/lib/theme";
+import { DARK_BG, TEXT_LIGHT } from "@/lib/theme";
 
 function FooterOrNothing() {
-  const { background } = useFooterBackground();
+  const { background, foreground } = useFooterBackground();
   if (background === "hidden") return null;
   return (
     <Credits
       style={{
         backgroundColor: background ?? DARK_BG,
+        color: foreground ?? TEXT_LIGHT,
       }}
     />
   );

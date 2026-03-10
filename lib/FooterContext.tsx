@@ -6,10 +6,14 @@ export type FooterBackgroundValue = string | null | "hidden";
 
 const FooterContext = createContext<{
   background: FooterBackgroundValue;
+  foreground: string | null;
   setBackground: (value: FooterBackgroundValue) => void;
+  setForeground: (value: string | null) => void;
 }>({
   background: null,
+  foreground: null,
   setBackground: () => {},
+  setForeground: () => {},
 });
 
 export function useFooterBackground() {
@@ -18,9 +22,11 @@ export function useFooterBackground() {
 
 export function FooterProvider({ children }: { children: ReactNode }) {
   const [background, setBackground] = useState<FooterBackgroundValue>(null);
-  const setter = useCallback((value: FooterBackgroundValue) => setBackground(value), []);
+  const [foreground, setForeground] = useState<string | null>(null);
+  const setBg = useCallback((value: FooterBackgroundValue) => setBackground(value), []);
+  const setFg = useCallback((value: string | null) => setForeground(value), []);
   return (
-    <FooterContext.Provider value={{ background, setBackground: setter }}>
+    <FooterContext.Provider value={{ background, foreground, setBackground: setBg, setForeground: setFg }}>
       {children}
     </FooterContext.Provider>
   );

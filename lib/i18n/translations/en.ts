@@ -55,6 +55,7 @@ export const en = {
   },
   waiting: {
     roomCode: "Room code",
+    scanToJoin: "Scan to join",
     players: "Players",
     playersCount: "Players ({{count}}/8):",
     host: "(host)",

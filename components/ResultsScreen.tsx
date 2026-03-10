@@ -25,11 +25,15 @@ export function ResultsScreen({
   const bgHex = useMemo(() => toCssHex(refColor), [refColor]);
   const textColor = useMemo(() => contrastColor(refColor), [refColor]);
   const useDarkLogo = useMemo(() => isLighterThan(bgHex, "#BBBBBB"), [bgHex]);
-  const { setBackground } = useFooterBackground();
+  const { setBackground, setForeground } = useFooterBackground();
   useEffect(() => {
     setBackground(bgHex);
-    return () => setBackground(null);
-  }, [bgHex, setBackground]);
+    setForeground(textColor);
+    return () => {
+      setBackground(null);
+      setForeground(null);
+    };
+  }, [bgHex, textColor, setBackground, setForeground]);
 
   const guesses = game.guesses ?? {};
   const describerId = game.playerOrder?.[game.turnIndex];

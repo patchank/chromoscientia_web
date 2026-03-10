@@ -22,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="antialiased min-h-screen flex flex-col" suppressHydrationWarning>
+      <body className="antialiased flex flex-col" suppressHydrationWarning>
         <LocaleProvider>
           <LayoutWithFooter>{children}</LayoutWithFooter>
         </LocaleProvider>

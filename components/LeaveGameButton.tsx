@@ -6,26 +6,30 @@ import { endGameForAll, leaveRoom } from "@/lib/room";
 import { useTranslations } from "@/lib/i18n";
 import { contrastColor, toCssHex } from "@/lib/colorContrast";
 
-/** Exit icon (stroke-only); color via currentColor. */
-function ExitIcon({ className }: { className?: string }) {
+/** Exit icon from /public/exit-outline.svg; color from mask + background. */
+function ExitIcon({
+  className,
+  color,
+}: {
+  className?: string;
+  color: string;
+}) {
   return (
-    <svg
+    <span
       className={className}
-      width="28"
-      height="28"
-      viewBox="0 0 512 512"
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="32"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      role="img"
       aria-hidden
-    >
-      <path d="M320,176V136a40,40,0,0,0-40-40H88a40,40,0,0,0-40,40V376a40,40,0,0,0,40,40H280a40,40,0,0,0,40-40V336" />
-      <polyline points="384 176 464 256 384 336" />
-      <line x1="191" y1="256" x2="464" y2="256" />
-    </svg>
+      style={{
+        display: "inline-block",
+        width: 28,
+        height: 28,
+        backgroundColor: color,
+        mask: "url(/exit-outline.svg) no-repeat center",
+        maskSize: "contain",
+        WebkitMask: "url(/exit-outline.svg) no-repeat center",
+        WebkitMaskSize: "contain",
+      }}
+    />
   );
 }
 
@@ -67,7 +71,7 @@ export function LeaveGameButton({
         }}
         aria-label={t("leaveGame.ariaLabel")}
       >
-        <ExitIcon />
+        <ExitIcon color={iconColor} />
       </button>
 
       {confirmOpen && (

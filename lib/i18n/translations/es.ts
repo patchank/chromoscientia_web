@@ -57,6 +57,7 @@ export const es: TranslationValues = {
   },
   waiting: {
     roomCode: "Código de sala",
+    scanToJoin: "Escanea para unirte",
     players: "Jugadores",
     playersCount: "Jugadores ({{count}}/8):",
     host: "(anfitrión)",

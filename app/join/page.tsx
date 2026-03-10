@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
 import { joinRoom, NICKNAME_TAKEN_ERROR } from "@/lib/room";
@@ -9,13 +9,31 @@ import { isFirebaseConfigured } from "@/lib/firebase";
 import { useTranslations } from "@/lib/i18n";
 import { ACCENT, ACCENT_BUTTON_TEXT, DARK_BG, ERROR, TEXT_LIGHT } from "@/lib/theme";
 
-export default function JoinPage() {
+function JoinPageFallback() {
+  return (
+    <main
+      className="flex min-h-screen flex-col items-center justify-center p-6"
+      style={{ backgroundColor: DARK_BG, color: TEXT_LIGHT }}
+    >
+      <Logo className="mb-6" />
+      <p className="opacity-90">…</p>
+    </main>
+  );
+}
+
+function JoinPageContent() {
   const { t } = useTranslations();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [code, setCode] = useState("");
   const [nickname, setNickname] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const codeFromUrl = searchParams.get("code")?.trim().toUpperCase();
+    if (codeFromUrl) setCode(codeFromUrl);
+  }, [searchParams]);
 
   const configured = isFirebaseConfigured();
 
@@ -128,5 +146,13 @@ export default function JoinPage() {
         {t("join.backToStart")}
       </Link>
     </main>
+  );
+}
+
+export default function JoinPage() {
+  return (
+    <Suspense fallback={<JoinPageFallback />}>
+      <JoinPageContent />
+    </Suspense>
   );
 }

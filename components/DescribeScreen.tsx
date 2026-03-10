@@ -22,11 +22,15 @@ export function DescribeScreen({
   const bgHex = useMemo(() => toCssHex(referenceColor), [referenceColor]);
   const textColor = useMemo(() => contrastColor(referenceColor), [referenceColor]);
   const useDarkLogo = useMemo(() => isLighterThan(bgHex, "#BBBBBB"), [bgHex]);
-  const { setBackground } = useFooterBackground();
+  const { setBackground, setForeground } = useFooterBackground();
   useEffect(() => {
     setBackground(bgHex);
-    return () => setBackground(null);
-  }, [bgHex, setBackground]);
+    setForeground(textColor);
+    return () => {
+      setBackground(null);
+      setForeground(null);
+    };
+  }, [bgHex, textColor, setBackground, setForeground]);
 
   async function handleSend() {
     const text = description.trim();

@@ -50,7 +50,7 @@ export function PlayWaitScreen({
   }, []);
 
   return (
-    <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden p-6">
+    <main className="screen-fit-viewport relative flex flex-col items-center justify-center overflow-hidden p-6">
       <LeaveGameButton roomCode={roomCode} backgroundColor={DARK_BG} />
       <div className="absolute inset-0 z-0">
         <canvas
