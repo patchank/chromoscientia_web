@@ -21,8 +21,24 @@ import { createRoomApi, NICKNAME_TAKEN_ERROR } from "@chromoscientia/shared";
 import { getDb } from "./firebase";
 import { getOrCreatePlayerId } from "./playerId";
 
-/** Local type for the Firestore API we pass to createRoomApi (avoids depending on shared package exporting it). */
-type FirestoreAdapter = Parameters<typeof createRoomApi>[2];
+/** Local type for the Firestore API we pass to createRoomApi (defined here so build works regardless of shared package version). */
+interface FirestoreAdapter {
+  doc: (db: unknown, collectionPath: string, ...pathSegments: string[]) => unknown;
+  setDoc: (ref: unknown, data: unknown) => Promise<void>;
+  getDoc: (ref: unknown) => Promise<{ exists: () => boolean; data: () => Record<string, unknown> }>;
+  updateDoc: (ref: unknown, data: unknown) => Promise<void>;
+  deleteDoc: (ref: unknown) => Promise<void>;
+  onSnapshot: (ref: unknown, callback: (snap: { exists: () => boolean; data: () => Record<string, unknown> }) => void) => () => void;
+  serverTimestamp: () => unknown;
+  arrayUnion: (...args: unknown[]) => unknown;
+  collection: (db: unknown, path: string) => unknown;
+  query: (...args: unknown[]) => unknown;
+  where: (field: string, op: string, value: unknown) => unknown;
+  getDocs: (q: unknown) => Promise<{ empty: boolean; docs: Array<{ id: string; ref: unknown }> }>;
+  writeBatch: (db: unknown) => { delete: (ref: unknown) => void; commit: () => Promise<void> };
+  limit: (n: number) => unknown;
+  Timestamp: { fromMillis: (ms: number) => unknown };
+}
 
 const firestoreAdapter = {
   doc,
